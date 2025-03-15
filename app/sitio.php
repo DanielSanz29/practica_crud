@@ -1,37 +1,49 @@
 <?php
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    header("Location: index.php");
+    exit();
+}
 
+// Manejo de logout
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF - 8">
-    <meta name="viewport" content="width=device - width, initial - scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <link rel="stylesheet" href="estilo . css">
+    <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-<h1>Admin Panel</h1>
 
-<!-- Navigation Buttons -->
+<h1>Panel de Administración</h1>
+
+<!-- Botones de navegación -->
 <div>
     <form action="sitio.php" method="post">
-        <div >
-            Conectado como XXXX  <input class="btn btn - logout" type="submit" value="Logout" name="submit">
+        <div>
+            <p>Conectado como <strong><?= $_SESSION['usuario'] ?></strong></p>
+            <button class="btn btn-logout" type="submit" name="logout">Cerrar sesión</button>
         </div>
         <hr/>
-        <input class="btn btn - create" type="submit" value="Productos" name="submit">
-        <input class="btn btn - edit" type="submit" value="Tiendas" name="submit">
-        <input class="btn btn - delete" type="submit" value="Usuarios" name="submit">
-        <input class="btn btn - create" type="submit" value="Stock" name="submit">
-
+        <a class="btn btn-create" href="productos.php">Productos</a>
+        <a class="btn btn-edit" href="tiendas.php">Tiendas</a>
+        <a class="btn btn-delete" href="usuarios.php">Usuarios</a>
+        <a class="btn btn-create" href="stock.php">Stock</a>
     </form>
-
 </div>
 
-<!-- Placeholder for Future Content -->
+<!-- Contenido principal -->
 <div id="content">
     <p>Selecciona una opción para gestionar los elementos de la tienda.</p>
 </div>
+
 </body>
 </html>
