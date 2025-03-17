@@ -1,34 +1,38 @@
+version: '3.8'
+
 services:
   web:
-    build : .
+    build: .
     ports:
-      - 8800:80
+      - "8800:80"
     volumes:
-      - ./../app:/var/www/html
+      - ../app:/var/www/html
       - .env:/var/www/html/.env
     container_name: web
+    depends_on:
+      - mysql
+
   mysql:
-    image: mysql
+    image: mysql:latest
     volumes:
       - ./mysql:/var/lib/mysql
       - ./datos.sql:/docker-entrypoint-initdb.d/datos.sql
     environment:
-      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${PASSWORD}
-      - MYSQL_DATABASE=${DATABASE}
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${PASSWORD}
+      MYSQL_DATABASE: ${DATABASE}
     ports:
-      - 33306:3306
+      - "33306:3306"
     container_name: mysql
+
   phpmyadmin:
-    image: phpmyadmin
+    image: phpmyadmin:latest
     ports:
-      - 8100:80
+      - "8100:80"
     environment:
-      - PMA_HOST=mysql
-      - PMA_ARBITRARY=1
+      PMA_HOST: mysql
+      PMA_ARBITRARY: 1
     depends_on:
       - mysql
     container_name: phpmyadmin
-
-
